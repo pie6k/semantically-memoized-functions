@@ -267,15 +267,14 @@ function outer(a, b, c) {
 
 ### How does this interact with closures over mutable values?
 
-In the example below, `count` is a mutable value and on each call, `increment` has access to 'fresh' value of `count`.
-
+Mutable variables can be used inside semantically memoized functions
 
 
 ```js
 let count = 0;
 
 function outer() {
-
+  // All `increment` functions are semantically identical as they reference the same `count` variable.
   function~ increment() {
     // Syntax error - `count` cannot be used as it is a mutable value
     return ++count;
@@ -285,29 +284,23 @@ function outer() {
 }
 ```
 
-This is a valid code and would be transpiled to something like this:
+However, the code below will be considered a syntax error:
 
 ```js
-const __cache_outer = new __FunctionMemoizationCache();
-
-let count = 0;
-const __count__ref = { get current() { return count; }, set current(value) { count = value; } };
 
 function outer() {
-  const __increment__keys = [__count__ref];
-
-  let increment = __cache_outer.get(__increment__keys);
-
-  if (!increment) {
-    increment = function~ increment() {
-      return ++count;
-    };
-    __cache_outer.set(__increment__keys, increment);
+  let count = 0;
+  
+  function~ increment() {
+    // Syntax error - `count` variable is re-defined on every call, so there is no way for `increment` functions to be semantically identical on every call.
+    return ++count;
   }
 
   return increment;
 }
 ```
+
+Thus, it is required for `count` variable to be defined in the parent scope that is independent from the scope where `increment` function is defined.
 
 ### Nested Memoized Functions
 

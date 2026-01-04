@@ -283,6 +283,7 @@ function outer() {
   return increment;
 }
 ```
+When transpiled, `count` does not even need to be used as cache key, as there is no way to change the reference of `count` variable used inside the scope of `increment` function.
 
 However, the code below will be considered a syntax error:
 

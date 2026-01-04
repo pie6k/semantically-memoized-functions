@@ -276,7 +276,6 @@ let count = 0;
 function outer() {
   // All `increment` functions are semantically identical as they reference the same `count` variable.
   function~ increment() {
-    // Syntax error - `count` cannot be used as it is a mutable value
     return ++count;
   }
 

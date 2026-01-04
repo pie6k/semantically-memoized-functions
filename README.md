@@ -4,7 +4,7 @@
 
 **Stage:** 0
 
-**Authors:** [Your Name]
+**Authors:** Adam Pietrasiak
 
 **Champions:** [TBD]
 
